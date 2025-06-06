@@ -1,0 +1,18 @@
+[package]
+name = "noisebell-client-template"
+version = "0.1.0"
+edition = "2021"
+authors = ["Jet Pham <jetthomaspham@gmail.com>"]
+description = "A webhook client for noisebell"
+repository = "https://github.com/jetpham/noisebell-client-template"
+
+[dependencies]
+tokio = { version = "1.36", features = ["full"] }
+axum = "0.7"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+tracing = "0.1"
+tracing-subscriber = "0.3"
+tracing-appender = "0.2"
+anyhow = "1.0"
+reqwest = { version = "0.11", features = ["json", "rustls-tls"], default-features=false}
