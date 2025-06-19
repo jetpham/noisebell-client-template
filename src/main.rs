@@ -5,7 +5,7 @@ use tracing::{error, info};
 
 mod logging;
 
-use noisebell_client_template::{AppState, create_app, find_available_port, register_with_server};
+use noisebell_client_template::{AppState, create_app, find_available_port, register_with_server, WebhookEvent};
 
 #[tokio::main]
 pub async fn main() -> anyhow::Result<()> {
@@ -13,7 +13,7 @@ pub async fn main() -> anyhow::Result<()> {
     info!("Starting Noisebell client...");
 
     let state = Arc::new(Mutex::new(AppState {
-        current_state: "unknown".to_string(),
+        current_state: WebhookEvent::Unknown("unknown".to_string()),
     }));
 
     let app = create_app(state);
