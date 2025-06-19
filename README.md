@@ -6,8 +6,8 @@ This is a template to subscribe to and listen to webhook events for [Noisebell](
 
 - Automatic server registration with retry mechanism
 - Comprehensive logging with daily rotating files
-- Automatic port discovery
-- Webhook event handling
+- Automatic port discovery (starts from port 3000)
+- Webhook event handling for noise detection
 - Health and status monitoring
 
 ## Prerequisites
@@ -47,8 +47,16 @@ cargo build --release
 
 ```bash
 # Server URL is required
-SERVER_URL=http://your-server:8080 cargo run
+SERVER_URL=http://localhost:3000 cargo run
 ```
+
+The client will:
+
+1. **Port Discovery**: Automatically find an available port starting from 3000
+2. **Server Registration**: Register its webhook endpoint with the Noisebell server
+3. **Webhook Server**: Start an Axum web server on localhost to receive webhook events
+4. **Event Handling**: Process incoming webhook events and log state changes
+5. **Retry Logic**: Automatically retry server registration if it fails
 
 ### Cross-compilation for Raspberry Pi
 
@@ -90,11 +98,18 @@ The client expects webhook payloads in the following JSON format:
 
 ```json
 {
-    "event_type": "string",
+    "event": "open|closed",
     "timestamp": "string",
-    "new_state": "open|closed"
+    "source": "string"
 }
 ```
+
+The `event` field can be:
+
+- `"open"`: Circuit is open - no noise detected
+- `"closed"`: Circuit is closed - noise detected
+- Any other string: Treated as unknown event type
+
 
 ## Logging
 
@@ -102,7 +117,13 @@ Logs are written to both stdout and daily rotating files in the `logs` directory
 
 - Console output for development
 - Daily rotating log files
-- Different log levels (info, error, etc.)
+- Different log levels (info, error, debug, etc.)
+
+## API Endpoints
+
+The client exposes the following endpoint:
+
+- `POST /`: Receives webhook events from the Noisebell server
 
 ## Customization
 
